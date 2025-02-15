@@ -1,0 +1,46 @@
+name: your_project
+description: "A Flutter project with a registration form."
+
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  
+  flutter_form_builder: ^9.1.0
+  image_picker: ^1.0.4
+  file_picker: ^8.0.0
+  url_launcher: ^6.1.14
+  pdf: ^3.11.3
+  path_provider: ^2.0.5
+  flutter_share_me: ^1.3.0 
+  flutter_pdfview: ^1.0.0
+  flutter_local_notifications: ^18.0.1
+  fluttertoast: ^8.0.8
+  flutter_launcher_icons: ^0.14.3
+  share_plus: ^10.1.4
+  geolocator: ^13.0.2
+  shared_preferences: ^2.2.2
+  email_validator: ^3.0.0
+  google_fonts: ^6.2.1
+  printing: ^5.6.0
+  http: ^1.1.0
+  chat_bubbles: ^1.5.0
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  dub: ^0.0.3
+
+flutter:
+  uses-material-design: true
+
+  #assets:
+    # - assets/images/
