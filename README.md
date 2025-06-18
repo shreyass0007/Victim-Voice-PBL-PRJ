@@ -2,7 +2,7 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.0+-blue.svg)](https://flutter.dev/)
 [![Dart](https://img.shields.io/badge/Dart-2.17+-blue.svg)](https://dart.dev/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-blue.svg)](https://flutter.dev/)
 [![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](pubspec.yaml)
 
@@ -108,8 +108,8 @@ share_plus: ^10.1.4
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/victim-voice.git
-   cd victim-voice
+   git clone https://github.com/shreyass0007/Victim-Voice.git
+   cd Victim-Voice
    ```
 
 2. **Install dependencies**
@@ -195,9 +195,9 @@ The app supports multiple languages through Flutter's localization framework. To
 ### Platform-Specific Setup
 
 #### Android
-- Minimum SDK: 21
+- Minimum SDK: 21 (configurable via flutter.minSdkVersion)
 - Target SDK: 33
-- Permissions: Camera, Location, Storage, Internet
+- Permissions: Camera, Location, Storage, Internet, Phone, Notifications
 
 #### iOS
 - Minimum iOS: 12.0
@@ -276,7 +276,7 @@ flutter test --coverage
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## 🆘 Support
 
@@ -289,8 +289,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Mental Health Support**: 1800-599-0019
 
 ### Technical Support
-- **Issues**: [GitHub Issues](https://github.com/yourusername/victim-voice/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/victim-voice/discussions)
+- **Issues**: [GitHub Issues](https://github.com/shreyass0007/Victim-Voice/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/shreyass0007/Victim-Voice/discussions)
 - **Email**: support@victimvoice.app
 
 ## 🙏 Acknowledgments
@@ -310,7 +310,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ Cross-platform compatibility
 - ✅ User authentication system
 - ✅ Complaint management system
-- 🔄 Blockchain integration (in progress)
+- ✅ Emergency contact management
+- ✅ Simplified dependency structure
+- 🔄 Blockchain integration (planned)
 - 🔄 Advanced analytics (planned)
 - 🔄 Community features (planned)
 - 🔄 Multi-language support expansion (planned)
@@ -324,6 +326,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Integration with law enforcement APIs
 - [ ] Advanced security features
 - [ ] Performance optimizations
+- [ ] Enhanced emergency features
+- [ ] Improved accessibility features
+
+## 🆕 Recent Updates
+
+### Version 1.0.0
+- ✅ Simplified dependency structure
+- ✅ Removed deprecated packages (telephony, uni_links)
+- ✅ Streamlined Android configuration
+- ✅ Enhanced emergency contact functionality
+- ✅ Improved code formatting and structure
+- ✅ Added comprehensive MIT license
 
 ---
 
