@@ -1,0 +1,150 @@
+@startuml DFD Level 0
+!theme plain
+skinparam componentStyle uml2
+
+[Women Safety Support App] as app
+actor "User" as user
+actor "Emergency Services" as emergency
+actor "Support Organizations" as support
+database "Emergency Contacts DB" as db
+
+user --> app : User Input
+app --> user : App Response
+app --> emergency : Emergency Alerts
+emergency --> app : Emergency Status
+app --> support : Support Requests
+support --> app : Support Resources
+app --> db : Store/Retrieve Contacts
+db --> app : Contact Data
+
+@enduml
+
+@startuml DFD Level 1
+!theme plain
+skinparam componentStyle uml2
+
+actor "User" as user
+actor "Emergency Services" as emergency
+actor "Support Organizations" as support
+database "Emergency Contacts DB" as db
+
+package "Women Safety Support App" {
+    [User Authentication] as auth
+    [Emergency Management] as em
+    [Chat Support] as chat
+    [Resource Management] as rm
+    [Contact Management] as cm
+}
+
+user --> auth : Login/Register
+auth --> user : Auth Status
+
+user --> em : Emergency Request
+em --> emergency : Emergency Alert
+emergency --> em : Response Status
+em --> user : Emergency Guidance
+
+user --> chat : Chat Messages
+chat --> user : AI Responses
+chat --> rm : Resource Requests
+rm --> chat : Resource Data
+
+user --> cm : Contact Updates
+cm --> db : Store Contacts
+db --> cm : Retrieve Contacts
+cm --> user : Contact List
+
+rm --> support : Support Queries
+support --> rm : Support Resources
+rm --> user : Resource Information
+
+@enduml
+
+@startuml DFD Level 2
+!theme plain
+skinparam componentStyle uml2
+
+actor "User" as user
+actor "Emergency Services" as emergency
+actor "Support Organizations" as support
+database "Emergency Contacts DB" as db
+
+package "Women Safety Support App" {
+    package "Authentication System" {
+        [Login Module] as login
+        [Registration Module] as reg
+        [Session Management] as session
+    }
+
+    package "Emergency System" {
+        [Emergency Button] as eb
+        [Location Tracking] as loc
+        [Alert System] as alert
+        [Emergency Protocol] as protocol
+    }
+
+    package "Chat System" {
+        [Message Processing] as msg
+        [AI Response Engine] as ai
+        [Context Analyzer] as context
+        [Resource Recommender] as rec
+    }
+
+    package "Resource System" {
+        [Resource Database] as rdb
+        [Category Manager] as cat
+        [Search Engine] as search
+        [Resource Formatter] as format
+    }
+
+    package "Contact System" {
+        [Contact CRUD] as crud
+        [Primary Contact Manager] as primary
+        [Contact Validator] as valid
+        [Contact Sync] as sync
+    }
+}
+
+' Authentication Flow
+user --> login : Credentials
+login --> session : Auth Token
+session --> user : Session Status
+user --> reg : Registration Data
+reg --> db : User Profile
+
+' Emergency Flow
+user --> eb : Emergency Trigger
+eb --> loc : Location Request
+loc --> alert : Location Data
+alert --> protocol : Alert Data
+protocol --> emergency : Emergency Alert
+emergency --> protocol : Response
+protocol --> user : Status Update
+
+' Chat Flow
+user --> msg : User Message
+msg --> context : Message Data
+context --> ai : Context Data
+ai --> rec : Response Data
+rec --> rdb : Resource Query
+rdb --> rec : Resource Data
+rec --> msg : Formatted Response
+msg --> user : AI Response
+
+' Resource Flow
+user --> search : Resource Query
+search --> cat : Query Data
+cat --> rdb : Category Filter
+rdb --> format : Resource Data
+format --> user : Formatted Resources
+support --> rdb : Resource Updates
+
+' Contact Flow
+user --> crud : Contact Data
+crud --> valid : Contact Info
+valid --> primary : Validated Data
+primary --> db : Contact Storage
+db --> sync : Contact Updates
+sync --> user : Updated Contacts
+
+@enduml 

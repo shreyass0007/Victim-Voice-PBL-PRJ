@@ -1,0 +1,147 @@
+{
+    "appTitle": "Victim Voice",
+    
+    "@appTitle": {
+        "description": "The title of the application"
+    },
+
+    "home": "Home",
+    "@home": {
+        "description": "Home navigation item"
+    },
+
+    "complaintForm": "Complaint Form",
+    "@complaintForm": {
+        "description": "Complaint form navigation item"
+    },
+
+    "complaintHistory": "Complaint History",
+    "@complaintHistory": {
+        "description": "Complaint history navigation item"
+    },
+
+    "emergencyContact": "Emergency Contact",
+    "@emergencyContact": {
+        "description": "Emergency contact navigation item"
+    },
+
+    "chatSupport": "Chat Support",
+    "@chatSupport": {
+        "description": "Chat support navigation item"
+    },
+
+    "knowYourRights": "Know Your Rights",
+    "@knowYourRights": {
+        "description": "Know your rights navigation item"
+    },
+
+    "supportServices": "Support Services",
+    "@supportServices": {
+        "description": "Support services navigation item"
+    },
+
+    "safetyGuidelines": "Safety Guidelines",
+    "@safetyGuidelines": {
+        "description": "Safety guidelines navigation item"
+    },
+
+    "settings": "Settings",
+    "@settings": {
+        "description": "Settings navigation item"
+    },
+
+    "signOut": "Sign Out",
+    "@signOut": {
+        "description": "Sign out navigation item"
+    },
+
+    "darkMode": "Dark Mode",
+    "@darkMode": {
+        "description": "Dark mode setting"
+    },
+
+    "enableDarkTheme": "Enable dark theme",
+    "@enableDarkTheme": {
+        "description": "Dark mode setting description"
+    },
+
+    "fontSize": "Font Size",
+    "@fontSize": {
+        "description": "Font size setting"
+    },
+
+    "language": "Language",
+    "@language": {
+        "description": "Language setting"
+    },
+
+    "notifications": "Notifications",
+    "@notifications": {
+        "description": "Notifications section title"
+    },
+
+    "enableNotifications": "Enable Notifications",
+    "@enableNotifications": {
+        "description": "Enable notifications setting"
+    },
+
+    "receiveUpdates": "Receive important updates",
+    "@receiveUpdates": {
+        "description": "Notifications setting description"
+    },
+
+    "feedback": "Feedback",
+    "@feedback": {
+        "description": "Feedback section title"
+    },
+
+    "soundEffects": "Sound Effects",
+    "@soundEffects": {
+        "description": "Sound effects setting"
+    },
+
+    "playSoundEffects": "Play sound effects",
+    "@playSoundEffects": {
+        "description": "Sound effects setting description"
+    },
+
+    "vibration": "Vibration",
+    "@vibration": {
+        "description": "Vibration setting"
+    },
+
+    "enableHapticFeedback": "Enable haptic feedback",
+    "@enableHapticFeedback": {
+        "description": "Vibration setting description"
+    },
+
+    "close": "Close",
+    "@close": {
+        "description": "Close button text"
+    },
+
+    "resetToDefaults": "Reset to defaults",
+    "@resetToDefaults": {
+        "description": "Reset settings button text"
+    },
+
+    "resetSettingsTitle": "Reset Settings",
+    "@resetSettingsTitle": {
+        "description": "Reset settings dialog title"
+    },
+
+    "resetSettingsMessage": "Are you sure you want to reset all settings to their default values?",
+    "@resetSettingsMessage": {
+        "description": "Reset settings confirmation message"
+    },
+
+    "reset": "Reset",
+    "@reset": {
+        "description": "Reset button text"
+    },
+
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Cancel button text"
+    }
+} 

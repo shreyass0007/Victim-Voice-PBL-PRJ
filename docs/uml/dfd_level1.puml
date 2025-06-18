@@ -1,0 +1,55 @@
+@startuml DFD Level 1
+!theme plain
+skinparam componentStyle uml2
+
+title Women Safety Support App - First Level Decomposition (Level 1)
+
+actor "User" as user
+actor "Emergency Services" as emergency
+actor "Support Organizations" as support
+database "Emergency Contacts DB" as db
+
+package "Women Safety Support App" {
+    [User Authentication] as auth
+    [Emergency Management] as em
+    [Chat Support] as chat
+    [Resource Management] as rm
+    [Contact Management] as cm
+}
+
+' Authentication Flow
+user --> auth : Login/Register
+auth --> user : Auth Status
+
+' Emergency Flow
+user --> em : Emergency Request
+em --> emergency : Emergency Alert
+emergency --> em : Response Status
+em --> user : Emergency Guidance
+
+' Chat Flow
+user --> chat : Chat Messages
+chat --> user : AI Responses
+chat --> rm : Resource Requests
+rm --> chat : Resource Data
+
+' Contact Flow
+user --> cm : Contact Updates
+cm --> db : Store Contacts
+db --> cm : Retrieve Contacts
+cm --> user : Contact List
+
+' Resource Flow
+rm --> support : Support Queries
+support --> rm : Support Resources
+rm --> user : Resource Information
+
+legend right
+  |Symbol|Meaning|
+  |<img:https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/Legend/component.png>|Process|
+  |<img:https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/Legend/person.png>|Actor|
+  |<img:https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/Legend/container.png>|Database|
+  |<img:https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/Legend/package.png>|Package|
+endlegend
+
+@enduml 

@@ -7,24 +7,80 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:dub/lib/main.dart';
+import 'package:victim_voice/screens/registration_form.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('RegistrationForm Widget Tests', () {
+    late WidgetTester tester;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    Future<void> pumpRegistrationForm() async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: RegistrationForm(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets('Registration form should render without crashing', (WidgetTester widgetTester) async {
+      tester = widgetTester;
+      await pumpRegistrationForm();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Verify that the registration form renders
+      expect(find.byType(RegistrationForm), findsOneWidget);
+      expect(find.text('Complaint Form'), findsOneWidget);
+    });
+
+    testWidgets('Registration form should show all sections', (WidgetTester widgetTester) async {
+      tester = widgetTester;
+      await pumpRegistrationForm();
+
+      // Verify all form sections are present
+      expect(find.text('Filing Type'), findsOneWidget);
+      expect(find.text('Personal Details'), findsOneWidget);
+      expect(find.text('Complaint Details'), findsOneWidget);
+      expect(find.text('Accused Information'), findsOneWidget);
+      expect(find.text('Evidence & Attachments'), findsOneWidget);
+      expect(find.text('Terms & Verification'), findsOneWidget);
+    });
+
+    testWidgets('Should toggle anonymous mode correctly', (WidgetTester widgetTester) async {
+      tester = widgetTester;
+      await pumpRegistrationForm();
+
+      // Find the anonymous switch
+      final anonymousSwitch = find.byType(SwitchListTile);
+      expect(anonymousSwitch, findsOneWidget);
+
+      // Toggle anonymous mode
+      await tester.tap(anonymousSwitch);
+      await tester.pumpAndSettle();
+
+      // Verify personal details section is hidden
+      expect(find.text('Personal Details'), findsNothing);
+    });
+
+    testWidgets('Should show progress indicator', (WidgetTester widgetTester) async {
+      tester = widgetTester;
+      await pumpRegistrationForm();
+
+      // Verify progress indicator exists
+      expect(find.text('Form Progress'), findsOneWidget);
+      expect(find.byType(LinearProgressIndicator), findsOneWidget);
+      expect(find.text('20% completed'), findsOneWidget); // Initial progress
+    });
+
+    testWidgets('Should show attachments section with proper info', (WidgetTester widgetTester) async {
+      tester = widgetTester;
+      await pumpRegistrationForm();
+
+      // Verify attachments section exists with proper labels
+      expect(find.text('Attachments'), findsOneWidget);
+      expect(find.text('Allowed files: Images, PDF, DOC, MP4 (Max 10MB each)'), findsOneWidget);
+      expect(find.text('Add Files (0/5)'), findsOneWidget);
+      expect(find.text('No attachments added'), findsOneWidget);
+    });
   });
 }

@@ -1,0 +1,29 @@
+@startuml DFD Level 0
+!theme plain
+skinparam componentStyle uml2
+
+title Women Safety Support App - Context Diagram (Level 0)
+
+[Women Safety Support App] as app
+actor "User" as user
+actor "Emergency Services" as emergency
+actor "Support Organizations" as support
+database "Emergency Contacts DB" as db
+
+user --> app : User Input
+app --> user : App Response
+app --> emergency : Emergency Alerts
+emergency --> app : Emergency Status
+app --> support : Support Requests
+support --> app : Support Resources
+app --> db : Store/Retrieve Contacts
+db --> app : Contact Data
+
+legend right
+  |Symbol|Meaning|
+  |<img:https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/Legend/component.png>|Process|
+  |<img:https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/Legend/person.png>|Actor|
+  |<img:https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/Legend/container.png>|Database|
+endlegend
+
+@enduml 

@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:your_project/widgets/drawer.dart'; // Update this to the correct path of an existing file
+import '../widgets/drawer.dart';
+import '../widgets/emergency_button.dart';
+import 'chatbot_screen.dart';
+import 'emergency_contacts_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  bool _isChatOpen = false;
+
+  // Theme colors
 
   void _showEmergencyOptions(BuildContext context) async {
     String? selectedOption = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
+          title: Text(
             'Emergency Services',
-            style: TextStyle(
+            style: GoogleFonts.lato(
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
@@ -21,9 +37,9 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'Select the service you need:',
-                  style: TextStyle(fontSize: 16),
+                  style: GoogleFonts.lato(fontSize: 16),
                 ),
                 const SizedBox(height: 16),
                 _buildEmergencyTile(
@@ -31,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.local_police,
                   title: 'Police',
                   subtitle: 'For immediate police assistance',
-                  number: '+919022159520',
+                  number: '100',
                   color: Colors.blue,
                 ),
                 const SizedBox(height: 8),
@@ -40,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.local_hospital,
                   title: 'Ambulance',
                   subtitle: 'For medical emergencies',
-                  number: '+919022159520',
+                  number: '108',
                   color: Colors.red,
                 ),
                 const SizedBox(height: 8),
@@ -49,8 +65,8 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.woman,
                   title: 'Women Helpline',
                   subtitle: '24/7 women safety helpline',
-                  number: '+919022159520',
-                  color: Colors.purple,
+                  number: '1091',
+                  color: Colors.blue,
                 ),
                 const SizedBox(height: 8),
                 _buildEmergencyTile(
@@ -58,8 +74,30 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.child_care,
                   title: 'Child Helpline',
                   subtitle: 'For child protection services',
-                  number: '+91902215952',
+                  number: '1098',
                   color: Colors.green,
+                ),
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EmergencyContactsScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.contacts),
+                  label: const Text('Manage Emergency Contacts'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.blue,
+                    side: const BorderSide(color: Colors.blue),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -87,7 +125,7 @@ class HomeScreen extends StatelessWidget {
         leading: Icon(icon, color: color, size: 28),
         title: Text(
           title,
-          style: const TextStyle(
+          style: GoogleFonts.lato(
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -107,9 +145,9 @@ class HomeScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
+          title: Text(
             'Confirm Emergency Call',
-            style: TextStyle(
+            style: GoogleFonts.lato(
               color: Colors.red,
               fontWeight: FontWeight.bold,
             ),
@@ -117,7 +155,7 @@ class HomeScreen extends StatelessWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.warning_amber_rounded,
                 color: Colors.red,
                 size: 48,
@@ -126,7 +164,7 @@ class HomeScreen extends StatelessWidget {
               Text(
                 'Are you sure you want to call emergency number $phoneNumber?',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16),
+                style: GoogleFonts.lato(fontSize: 16),
               ),
               const SizedBox(height: 12),
               Container(
@@ -135,9 +173,9 @@ class HomeScreen extends StatelessWidget {
                   color: Colors.red.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
+                child: Text(
                   'Only proceed if you have a genuine emergency.',
-                  style: TextStyle(
+                  style: GoogleFonts.lato(
                     fontSize: 13,
                     color: Colors.red,
                     fontWeight: FontWeight.w500,
@@ -150,9 +188,9 @@ class HomeScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text(
+              child: Text(
                 'Cancel',
-                style: TextStyle(color: Colors.grey),
+                style: GoogleFonts.lato(color: Colors.grey),
               ),
             ),
             ElevatedButton.icon(
@@ -164,9 +202,11 @@ class HomeScreen extends StatelessWidget {
                   vertical: 8,
                 ),
               ),
-              icon: const Icon(Icons.phone, color: Colors.white),
-              label:
-                  const Text('Call Now', style: TextStyle(color: Colors.white)),
+              icon: Icon(Icons.phone, color: Colors.white),
+              label: Text(
+                'Call Now',
+                style: GoogleFonts.lato(color: Colors.white),
+              ),
             ),
           ],
           actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -181,66 +221,257 @@ class HomeScreen extends StatelessWidget {
 
   void _makeCall(String phoneNumber) async {
     final Uri callUri = Uri.parse('tel:$phoneNumber');
-    if (await canLaunchUrl(callUri)) {
-      await launchUrl(callUri);
+    try {
+      if (await canLaunchUrl(callUri)) {
+        await launchUrl(callUri);
+      } else {
+        throw 'Could not launch call to $phoneNumber';
+      }
+    } catch (e) {
+      debugPrint("Error making call: $e");
+      // Show error dialog to user
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Error'),
+            content: Text('Could not make call: $e'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleChat() {
+    setState(() => _isChatOpen = !_isChatOpen);
+    if (_isChatOpen) {
+      _animationController.forward();
     } else {
-      print("Could not launch call to $phoneNumber");
+      _animationController.reverse();
+    }
+
+    if (_isChatOpen) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.9,
+            decoration: BoxDecoration(
+              color: isDark
+                  ? Theme.of(context).dialogBackgroundColor
+                  : Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              border: isDark
+                  ? Border.all(
+                      color: Colors.grey.shade800,
+                      width: 1,
+                    )
+                  : null,
+              boxShadow: [
+                BoxShadow(
+                  color: isDark
+                      ? Colors.black.withOpacity(0.3)
+                      : Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, -5),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Container(
+                  height: 4,
+                  width: 40,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.grey.shade700 : Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    child: const ChatbotScreen(),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ).then((_) {
+        setState(() => _isChatOpen = false);
+        _animationController.reverse();
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Victim Voice',
           style: TextStyle(
-            color: Colors.black87,
+            color: isDark ? Colors.white : Colors.black87,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 179, 212, 255),
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black87),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              const Color.fromARGB(255, 179, 212, 255),
-              Colors.white,
-            ],
+        backgroundColor: isDark
+            ? Theme.of(context).appBarTheme.backgroundColor
+            : const Color.fromARGB(255, 179, 212, 255),
+        elevation: isDark ? 0 : 0,
+        iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black87),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.emergency,
+                color: isDark ? Colors.red.shade300 : Colors.red),
+            onPressed: () => _showEmergencyOptions(context),
           ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildWelcomeCard(),
-                const SizedBox(height: 25),
-                _buildQuickActions(),
-                const SizedBox(height: 25),
-                _buildEmergencySection(),
-                const SizedBox(height: 25),
-                _buildResourcesSection(),
-              ],
+          IconButton(
+            icon: Icon(Icons.contacts_outlined,
+                color: isDark ? Colors.white : Colors.black87),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EmergencyContactsScreen(),
+              ),
             ),
           ),
-        ),
+        ],
       ),
-      drawer: MyDrawer(),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: isDark
+                    ? [
+                        Theme.of(context).primaryColor.withOpacity(0.2),
+                        Theme.of(context).scaffoldBackgroundColor,
+                      ]
+                    : [
+                        const Color.fromARGB(255, 179, 212, 255),
+                        Colors.white,
+                      ],
+              ),
+            ),
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildWelcomeCard(),
+                    const SizedBox(height: 25),
+                    _buildQuickActions(context),
+                    const SizedBox(height: 25),
+                    _buildEmergencySection(),
+                    const SizedBox(height: 25),
+                    _buildFeaturesList(context),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Emergency Button
+          Positioned(
+            right: 16,
+            bottom: 88,
+            child: const EmergencyButton(),
+          ),
+          // Chat Support Button
+          Positioned(
+            right: 16,
+            bottom: 16,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark
+                        ? Colors.black.withOpacity(0.3)
+                        : Theme.of(context).primaryColor.withOpacity(0.3),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: RotationTransition(
+                turns:
+                    Tween(begin: 0.0, end: 0.125).animate(_animationController),
+                child: FloatingActionButton(
+                  onPressed: _toggleChat,
+                  backgroundColor:
+                      isDark ? Colors.blue.withOpacity(0.8) : Colors.blue,
+                  elevation: isDark ? 2 : 0,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _isChatOpen
+                        ? Icon(
+                            Icons.close,
+                            key: const ValueKey('close_icon'),
+                            color: isDark
+                                ? Colors.white.withOpacity(0.9)
+                                : Colors.white,
+                          )
+                        : Icon(
+                            Icons.chat_bubble_outline,
+                            key: const ValueKey('chat_icon'),
+                            color: isDark
+                                ? Colors.white.withOpacity(0.9)
+                                : Colors.white,
+                          ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildWelcomeCard() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Card(
-      elevation: 4,
+      elevation: isDark ? 2 : 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
@@ -251,85 +482,90 @@ class HomeScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.blue.shade100,
-              Colors.white,
-            ],
+            colors: isDark
+                ? [
+                    Colors.blue.shade900,
+                    Theme.of(context).cardColor,
+                  ]
+                : [
+                    Colors.blue.shade100,
+                    Colors.white,
+                  ],
           ),
         ),
         child: Column(
           children: [
-            const Icon(
+            Icon(
               Icons.security,
               size: 48,
-              color: Colors.blue,
-            ),
+              color: isDark ? Colors.blue.shade300 : Colors.blue,
+            ).animate().scale(delay: 200.ms).fade(),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Welcome to Victim Voice',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: isDark ? Colors.white : Colors.black87,
               ),
-            ),
+            ).animate().fadeIn(delay: 300.ms).slideY(),
             const SizedBox(height: 12),
-            const Text(
+            Text(
               'Your safety is our priority. Report incidents or contact emergency services immediately.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.black54,
+                color: isDark ? Colors.white : Colors.black54,
                 height: 1.4,
+              ),
+            ).animate().fadeIn(delay: 400.ms),
+          ],
+        ),
+      ),
+    ).animate().scale(delay: 100.ms).fade();
+  }
+
+  Widget _buildQuickActions(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 12),
+          child: Text(
+            'Quick Actions',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : Colors.black87,
+            ),
+          ),
+        ).animate().fadeIn().slideX(),
+        Row(
+          children: [
+            Expanded(
+              child: _buildActionButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/complaintForm');
+                },
+                icon: Icons.report_problem,
+                label: 'File a\nComplaint',
+                color: Colors.blue,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildActionButton(
+                onPressed: () => _showEmergencyOptions(context),
+                icon: Icons.emergency,
+                label: 'Emergency\nServices',
+                color: Colors.red,
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildQuickActions() {
-    return Builder(
-      builder: (context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 4, bottom: 12),
-            child: Text(
-              'Quick Actions',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: _buildActionButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/register');
-                  },
-                  icon: Icons.report_problem,
-                  label: 'File a\nComplaint',
-                  color: Colors.blue,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildActionButton(
-                  onPressed: () => _showEmergencyOptions(context),
-                  icon: Icons.emergency,
-                  label: 'Emergency\nServices',
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -339,16 +575,20 @@ class HomeScreen extends StatelessWidget {
     required String label,
     required Color color,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onPressed,
         borderRadius: BorderRadius.circular(15),
+        onTap: onPressed,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            border: Border.all(color: color.withOpacity(0.3)),
+            color: isDark ? color.withOpacity(0.15) : color.withOpacity(0.1),
+            border: Border.all(
+              color: isDark ? color.withOpacity(0.3) : color.withOpacity(0.3),
+            ),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Column(
@@ -360,7 +600,7 @@ class HomeScreen extends StatelessWidget {
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: color,
+                  color: isDark ? Colors.white : color,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -369,10 +609,11 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ).animate().scale(delay: 100.ms).fade();
   }
 
   Widget _buildEmergencySection() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -397,127 +638,158 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'In case of emergency, use the Emergency Services button above or dial your local emergency number. Help is available 24/7.',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.black87,
+                color: isDark ? Colors.white : Colors.black87,
                 height: 1.4,
               ),
             ),
           ],
         ),
       ),
-    );
+    ).animate().fadeIn(delay: 500.ms).slideY();
   }
 
-  Widget _buildResourcesSection() {
-    return Builder(
-      builder: (context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 4, bottom: 12),
-            child: Text(
-              'Helpful Resources',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+  Widget _buildFeaturesList(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final features = [
+      {
+        'title': 'Report Cyber Crime',
+        'description': 'Report online harassment, fraud, or other cyber crimes',
+        'icon': Icons.security,
+        'color': Colors.blue,
+        'route': '/cyberCrime'
+      },
+      {
+        'title': 'File a Complaint',
+        'description': 'Register your complaint with relevant authorities',
+        'icon': Icons.description,
+        'color': Colors.blue,
+        'route': '/complaintForm'
+      },
+      {
+        'title': 'Know Your Rights',
+        'description': 'Learn about your legal rights and protections',
+        'icon': Icons.gavel,
+        'color': Colors.blue,
+        'route': '/rights'
+      },
+      {
+        'title': 'Support Services',
+        'description': 'Access counseling and support services',
+        'icon': Icons.support_agent,
+        'color': Colors.blue,
+        'route': '/support'
+      },
+      {
+        'title': 'Safety Tips',
+        'description': 'Learn how to stay safe and protect yourself',
+        'icon': Icons.health_and_safety,
+        'color': Colors.blue,
+        'route': '/safety'
+      },
+      {
+        'title': 'Chat Support',
+        'description': 'Talk to our AI assistant for immediate guidance',
+        'icon': Icons.chat,
+        'color': Colors.blue,
+        'route': '/chatbot'
+      },
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 12),
+          child: Text(
+            'Services & Resources',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : Colors.black87,
             ),
           ),
-          _buildResourceCard(
-            icon: Icons.gavel,
-            title: 'Know Your Rights',
-            description: 'Learn about your legal rights and protections',
-            onTap: () {
-              Navigator.pushNamed(context, '/rights');
-            },
-          ),
-          const SizedBox(height: 12),
-          _buildResourceCard(
-            icon: Icons.support_agent,
-            title: 'Support Services',
-            description: 'Find counseling and support services near you',
-            onTap: () {
-              Navigator.pushNamed(context, '/support');
-            },
-          ),
-          const SizedBox(height: 12),
-          _buildResourceCard(
-            icon: Icons.help_outline,
-            title: 'Safety Guidelines',
-            description: 'Essential safety tips and preventive measures',
-            onTap: () {
-              Navigator.pushNamed(context, '/safety');
-            },
-          ),
-          const SizedBox(height: 12),
-          _buildResourceCard(
-            icon: Icons.chat,
-            title: 'Chat Support',
-            description: 'Talk to our AI assistant for immediate guidance',
-            onTap: () {
-              Navigator.pushNamed(context, '/chatbot');
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildResourceCard({
-    required IconData icon,
-    required String title,
-    required String description,
-    required VoidCallback onTap,
-  }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Icon(icon, color: Colors.blue, size: 32),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+        ).animate().fadeIn().slideX(),
+        ...features.map((feature) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: InkWell(
+                  onTap: () =>
+                      Navigator.pushNamed(context, feature['route'] as String),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? Theme.of(context).cardTheme.color
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: isDark
+                          ? Border.all(color: Colors.grey.shade800)
+                          : null,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      description,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
-                      ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: (feature['color'] as Color)
+                                .withOpacity(isDark ? 0.15 : 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            feature['icon'] as IconData,
+                            color: feature['color'] as Color,
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                feature['title'] as String,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark ? Colors.white : Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                feature['description'] as String,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: isDark
+                                      ? Colors.grey.shade400
+                                      : Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: isDark
+                              ? Colors.grey.shade400
+                              : Colors.grey.shade600,
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: Colors.grey.shade400,
-              ),
-            ],
-          ),
-        ),
-      ),
+            )),
+      ],
     );
   }
 }
