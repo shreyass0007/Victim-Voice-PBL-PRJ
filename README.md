@@ -121,6 +121,28 @@ share_plus: ^10.1.4
    Create a `.env` file in the root directory:
    ```env
    ANTHROPIC_API_KEY=your_anthropic_api_key_here
+   POLICE_EMAIL=police@example.com
+   EMAIL_SUBJECT=New Complaint Report
+   SMTP_USERNAME=your_email@gmail.com
+   SMTP_PASSWORD=your_email_password_or_app_password
+   ```
+   
+   The `.env` file is used to securely store sensitive environment variables required by the app, such as API keys. This keeps secrets out of your source code and version control. 
+   
+   - **ANTHROPIC_API_KEY**: This key is required for enabling the AI chatbot functionality in the app. You can obtain it from your Anthropic account or service provider.
+   - **POLICE_EMAIL**: The email address where completed complaint forms are sent (e.g., the official police or authority email).
+   - **EMAIL_SUBJECT**: The subject line for complaint emails sent to the police.
+   - **SMTP_USERNAME** and **SMTP_PASSWORD**: Credentials for the SMTP server used to send emails (e.g., a Gmail account or other mail provider). These are required for the app to send complaint emails.
+   - **Never commit your `.env` file to version control.**
+   - You may add other environment variables as needed for additional services or configuration.
+
+   Example `.env` file:
+   ```env
+   ANTHROPIC_API_KEY=your_anthropic_api_key_here
+   POLICE_EMAIL=police@example.com
+   EMAIL_SUBJECT=New Complaint Report
+   SMTP_USERNAME=your_email@gmail.com
+   SMTP_PASSWORD=your_email_password_or_app_password
    ```
 
 4. **Run the application**
@@ -134,6 +156,12 @@ share_plus: ^10.1.4
    flutter run -d chrome
    flutter run -d windows
    ```
+
+5. **Login Credentials for Demo/Test**
+   > Use the following credentials to log in to the app during development/testing:
+   >
+   > - **Email:** admin@gmail.com
+   > - **Password:** admin123
 
 ## 🏗️ Project Structure
 
